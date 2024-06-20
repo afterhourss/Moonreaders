@@ -6,6 +6,13 @@ require('dotenv').config();
 
 const router = express.Router();
 
+//generate jwt token
+function jwtGenerate(id_user){
+    const payload = {id: id_user}
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '1h'})
+    return token;
+}
+
 router.post('/register', async(req, res) => {
     try{
         const {username, password} = req.body; //jika terjadi post pada /auth/register, maka username akan didestructuring dari body
@@ -25,10 +32,7 @@ router.post('/register', async(req, res) => {
         const newUser = await pool.query('INSERT INTO users(username, password) VALUES($1,$2)',[username, bcryptPassword])
 
         //generate jwt token
-        const payload = {id: user.id_user}
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '1h'})
-
-        res.json(token)
+        res.json(jwtGenerate(user.id_user))
 
     }catch(err){
         console.log(err)
@@ -49,8 +53,13 @@ router.post('/login', async(req,res) => {
         }
 
         //cek apakah login password sama dengan database password
+        const validPassword = await bcrypt.compare(password, user.rows[0].password)
 
+        if(!validPassword){
+            return res.status(401).send('Invalid username and password')
+        }
 
+        res.json(jwtGenerate(user.id_user))
 
     }catch(err){
         console.log(err);
