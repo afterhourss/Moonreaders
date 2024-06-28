@@ -1,6 +1,7 @@
 import SearchBar from "./SearchBar"
 import BookWrapper from "./BookWrapper"
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
 
 function getCapitalize(string){
   const modStr = string[0].toUpperCase() + string.slice(1);
@@ -10,10 +11,11 @@ function getCapitalize(string){
 function Category() {
 
   const [books, setBook] = useState([]);
+  const [category, setCategory] = useState([]);
   
   const getBook = async () => {
     try{
-      const response = await fetch('http://localhost:5000/')
+      const response = await fetch('http://localhost:5000/book')
       const jsonData = await response.json()
 
       setBook(jsonData);
@@ -22,19 +24,35 @@ function Category() {
     }
   }
 
+  const getCategory = async () => {
+    try{
+      const response = await fetch('http://localhost:5000/category')
+      const jsonData = await response.json()
+
+      setCategory(jsonData);
+    }catch(err){
+      console.error(err.message)
+    }
+  }
+
   useEffect(() => {
     getBook();
+    getCategory();
   },[])
 
-  console.log(books)
-
   return (
-    <div className="mx-24 mt-28 flex gap-28">
-      <div className="flex-2"> 
-        <h1 className="text-3xl font-bold">Book of the Year 📚</h1>
-        {books.map(book => {
+    <div className="px-24 pt-24 mt-14 flex gap-28 bg-white">
+      <div className="flex-2 space-y-3">
+      <h1 className="text-3xl font-bold text-gray-300 pb-9">Category</h1>
+      {category.map((item, index) => {
+        return <div className="pl-3 py-1 hover:bg-blue-50 hover:rounded-full group" key={index}>
+          <h3 className="group-hover:text-blue-400 text-lg text-gray-800 font-medium">{getCapitalize(item.name)}</h3>
+        </div>
+      })}
+        {/* <h1 className="text-3xl font-bold">Book of the Year 📚</h1>
+        {books.map(book => {  
         if(book.boty){
-        return <div key={book.id} className="flex gap-4 mt-7 items-center">
+        return <div key={book.id_book} className="flex gap-4 mt-7 items-center">
           <img src={book.cover} alt="sakamotodays" className="w-24 rounded-md" />
           <div>
             <h3 className="font-medium text-2xl">{getCapitalize(book.title)}</h3>
@@ -42,13 +60,13 @@ function Category() {
           </div>
         </div>
         }
-        })}
+        })} */}
       </div>
-      <div className="w-full flex flex-col">
+      <div className="w-full flex flex-col border-l mx-auto pl-11">
         <SearchBar/>
-        <div className="flex flex-wrap gap-x-16">
+        <div className="flex flex-wrap gap-x-10">
           {books.map(book => {
-            return <BookWrapper key={book.id_book} title={getCapitalize(book.title)} author={book.author} cover={book.cover}/>
+            return <Link key={book.id_book} to={`/info/${book.id_book}`}><BookWrapper title={getCapitalize(book.title)} author={book.author} cover={book.cover} rating={book.rating} price={book.price}/></Link>
           })}
         </div>
       </div>

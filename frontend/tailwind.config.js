@@ -8,8 +8,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'sans': ['"Roboto Condensed"',...defaultTheme.fontFamily.sans],
-        'markazi': ['"Markazi Text"', 'serif']
+        'sans': ['Poppins'],
       }
     },
   },

@@ -7,10 +7,10 @@ require('dotenv').config();
 const router = express.Router();
 
 //generate jwt token
-function jwtGenerate(id_user){
-    const payload = {id: id_user}
+function jwtGenerate(user){
+    const payload = {id_user: user.id_user, username: user.username, password: user.password}
     const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '1h'})
-    return token;
+    return { token };
 }
 
 router.post('/register', async(req, res) => {
@@ -30,9 +30,8 @@ router.post('/register', async(req, res) => {
         
         const bcryptPassword = await bcrypt.hash(password, salt)
         const newUser = await pool.query('INSERT INTO users(username, password) VALUES($1,$2)',[username, bcryptPassword])
-
-        //generate jwt token
-        res.json(jwtGenerate(user.id_user))
+        // generate jwt token
+        // res.json(jwtGenerate(newUser.rows[0].id_user))
 
     }catch(err){
         console.log(err)
@@ -59,11 +58,11 @@ router.post('/login', async(req,res) => {
             return res.status(401).send('Invalid username and password')
         }
 
-        res.json(jwtGenerate(user.id_user))
+        res.json(jwtGenerate(user.rows[0]))
 
     }catch(err){
         console.log(err);
-        res.status
+        res.status(401).send('Invalid')
     }
 })
 
