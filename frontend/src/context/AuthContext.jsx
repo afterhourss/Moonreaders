@@ -1,5 +1,6 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, Children } from "react";
 import axios from "axios";
+
 import SignupPage from "../routes/SignupPage";
 
 export const AuthContext = createContext();
@@ -28,7 +29,8 @@ function AuthProvider() {
     //     return response.data;
     // };
   return (
-    <AuthContext.Provider value={{register}}>
+    <AuthContext.Provider value={register}>
+      {/* {children} */}
       <SignupPage/>
     </AuthContext.Provider>
   )

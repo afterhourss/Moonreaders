@@ -22,7 +22,7 @@ const navbarLink = [
   },
 ]
 
-function Navbar({cart}) {
+function Navbar({cart, user, auth}) {
 
   const [scroll, setScrolled] = useState('')
 
@@ -54,6 +54,8 @@ function Navbar({cart}) {
             </ul>
         </div>
         <div className="flex gap-14 text-lg items-center">
+          {!auth ?
+          <>
             <Link to="/cart">
               <button className="p-3 bg-gray-200 text-gray-500 rounded-full
               relative">
@@ -63,6 +65,9 @@ function Navbar({cart}) {
             </Link>
             <div><Link to="/signin" className="font-semibold">Sign in</Link></div>
             <Link to="/signup"><Button text="Sign up"/></Link>
+            </>
+            : <div>Welcome back, {user.username}</div>
+          }
         </div>
     </div>
   )

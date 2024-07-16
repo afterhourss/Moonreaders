@@ -2,13 +2,14 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
+const middle = require('../middleware/auth')
 require('dotenv').config();
 
 const router = express.Router();
 
 //generate jwt token
 function jwtGenerate(user){
-    const payload = {id_user: user.id_user, username: user.username, password: user.password}
+    const payload = {username: user.username}
     const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '1h'})
     return { token };
 }
@@ -63,6 +64,16 @@ router.post('/login', async(req,res) => {
     }catch(err){
         console.log(err);
         res.status(401).send('Invalid')
+    }
+})
+
+router.post('/protected', middle, async(req,res) => {
+    // res.json(req.username)
+    try {
+        const user = await pool.query('SELECT username FROM users WHERE username = $1', [req.username])
+        res.json({auth: true, data: user})
+    } catch (error) {
+        console.log(error)
     }
 })
 

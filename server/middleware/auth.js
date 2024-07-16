@@ -6,7 +6,7 @@ const middle = async(req, res, next) => {
 
         const jwtToken = req.header("token")
         if(!jwtToken){
-            return res.status(401).json('youre not authorized')
+            return res.status(401).json('token not auth')
         }
 
         //verifikasi apakah jwt token adalah asli dan tidak manual di inspect browser, mereturn payload

@@ -46,9 +46,6 @@ app.get('/info/:id', async(req,res) => {
 
 app.use('/auth', auth) //middleware untuk menjalankan route lainnya
 
-app.get('/auth/protected', middle, (req,res) => {
-    res.json({message: `welcome ${req.username}`})
-})
 
 const PORT = process.env.PORT || 5000;
 
