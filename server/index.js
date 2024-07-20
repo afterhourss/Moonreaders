@@ -13,13 +13,23 @@ app.use(express.json());
 // routes
 // create
 
-// get
+// get book
 app.get('/book', async(req, res) => { //jika routenya pada servernya diarahkan ke '/', maka jalankan server GET untuk mendapatkan semua data buku
     try{
         const allBook = await pool.query('SELECT book.*, review.rating FROM book LEFT JOIN review ON review.id_book = book.id_book')
         res.json(allBook.rows);
     }catch (err){
         console.error(err.message)
+    }
+})
+
+//get book of the year
+app.get('/book/boty', async(req,res) => {
+    try {
+        const botyBook = await pool.query('SELECT * FROM book WHERE boty = $1', [true])
+        res.json(botyBook.rows)
+    } catch (error) {
+        console.error(error.message)
     }
 })
 
