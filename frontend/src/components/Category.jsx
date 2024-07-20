@@ -12,6 +12,7 @@ function Category() {
 
   const [books, setBook] = useState([]);
   const [category, setCategory] = useState([]);
+  const [boty, setBoty] = useState([]);
   
   const getBook = async () => {
     try{
@@ -35,9 +36,21 @@ function Category() {
     }
   }
 
+  const getBoty = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/book/boty')
+      const jsonData = await response.json()
+
+      setBoty(jsonData);
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
+
   useEffect(() => {
     getBook();
     getCategory();
+    getBoty();
   },[])
 
   return (
@@ -62,8 +75,20 @@ function Category() {
         }
         })} */}
       </div>
+
       <div className="w-full flex flex-col border-l mx-auto pl-11">
-        <SearchBar/>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-300">Book of the year</h1>
+        <div className="flex gap-5 my-10">
+          {boty.map((book, index) => {
+            return <div className="relative" key={index}>
+              <img src={book.cover} alt="" className="rounded-md w-[130px] h-[200px] object-cover"/>
+              <div className="absolute top-0 bg-white w-10 h-10 text-center font-bold text-xl rounded-md">{index + 1}</div>
+            </div>
+          })}
+          
+        </div>
+      </div>
         <div className="flex flex-wrap gap-x-10">
           {books.map(book => {
             return <Link key={book.id_book} to={`/info/${book.id_book}`}><BookWrapper title={getCapitalize(book.title)} author={book.author} cover={book.cover} rating={book.rating} price={book.price}/></Link>
