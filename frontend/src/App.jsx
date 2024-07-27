@@ -27,14 +27,36 @@ function App() {
       //cek jika cart item yang baru sudah ada di array sebelumnya
     const itemExists = oldArray.some(item => item.id_book === newItem.id_book);
     
+    if(itemExists){
+      return oldArray.map(item => item.id_book === newItem.id_book ? {...item, qty: item.qty + 1} : item
+      )
+    } else {
+      return [...oldArray, {...newItem, qty: 1}]
+    }
     //jika item tidak ada, masukkan kedalam array cart, sebaliknya return array yang lama
-    return itemExists ? oldArray : [...oldArray, newItem];
+    })
+    
+  }
+
+  const addQty = (id) => {
+    setCart(oldArray => {
+      return oldArray.map(item => item.id_book === id ? {...item, qty: item.qty + 1} : item)
     })
   }
+
+  const minQty = (id) => {
+    setCart(oldArray => {
+      return oldArray.map(item => item.id_book === id ? {...item, qty: item.qty - 1 || 1} : item)
+    })
+  } 
+
+
   const removeCartItem = (id) => {
     const updatedCart = cart.filter(item => item.id_book !== id)
     setCart(updatedCart)
   }
+  
+  console.log(cart)
 
   useEffect(() => {
     checkAuth();
@@ -43,7 +65,7 @@ function App() {
   return (
     <div className="pt-24">
       <Navbar cart={cart} user={userData} auth={isAuth}/>
-      <Outlet context={[addCart, cart, removeCartItem]}/>
+      <Outlet context={[addCart, cart, removeCartItem, addQty, minQty]}/>
     </div>
   )
 }

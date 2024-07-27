@@ -47,8 +47,13 @@ app.get('/category', async(req, res) => {
 app.get('/info/:id', async(req,res) => {
     try {
         const { id } = req.params;
-        const infoBook = await pool.query('SELECT * FROM book WHERE id_book = $1',[id])
-        res.json(infoBook.rows)
+        const infoBook = await pool.query(`SELECT book.*, ARRAY_AGG(author.name) AS author_name
+            FROM book_author
+            JOIN book ON book_author.id_book = book.id_book
+            JOIN author ON book_author.id_author = author.id_author
+            WHERE book.id_book = $1
+            GROUP BY book.id_book, book.title`,[id])
+        res.json(infoBook)
     } catch (error) {
         console.log(err.message)
     }
@@ -62,3 +67,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(5000, () => {
   console.log(`server has started on port ${PORT}`);
 });
+
+

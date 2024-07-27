@@ -1,52 +1,79 @@
 import { useState } from "react"
 import { IoIosClose } from "react-icons/io";
 import { useOutletContext } from "react-router-dom";
-useOutletContext
+import { toRupiah, getCapitalize } from "../utils/utils";
+import { Link } from "react-router-dom";
 
 function Cartpage() {
-    const [addCart, cart, removeCartItem] = useOutletContext();
-    const [qty, setQty] = useState(0);
+    const [addCart, cart, removeCartItem, addQty, minQty] = useOutletContext();
 
-    const addQty = (id) => {
-        setQty(prevQty => ({
-            ...prevQty,
-            [id]: (prevQty[id] || 1) + 1
-        }));
-    };
 
-    const minQty = (id) => {
-        setQty(prevQty => ({
-            ...prevQty,
-            [id]: (prevQty[id] > 1 ? prevQty[id] - 1 : 1)
-        }));
-    };
-
+    const getTotal = (cart) => {
+        const total = cart.reduce((total, item) => total + item.qty * item.price, 0)
+        return toRupiah(total)
+    }
   
   return (
-    <div className="mx-56">
-        <h1 className="font-bold text-3xl py-20">My Cart.</h1>
-        {cart.map(item => {
-        return <div className="flex justify-around gap-24 items-center border-b py-3" key={item.id_book}>
-            <div className="flex-1">
-                <div className="flex items-center gap-4">
-                    <IoIosClose className="text-4xl text-gray-600 cursor-pointer" onClick={() => removeCartItem(item.id_book)}/>
-                    <img src={item.cover} alt="" className="w-20" />
-                    <div>
-                        <h1 className="font-bold text-lg">{item.title}</h1>
-                        <p>Author Name</p>
+    <>
+    <div className="py-20 px-52 flex items-center justify-between">
+        <h1 className="font-bold text-3xl">My Cart.</h1>
+        <div><Link to="/"><IoIosClose className="text-5xl"/></Link></div>
+    </div>
+    {!cart.length ? <div className="italic flex justify-center items-center h-[85vh] text-3xl">There's no item in cart</div>
+    :
+    <div className="mx-56 flex justify-center gap-12">
+        <div>
+            {cart.map(item => {
+            return <div className="flex justify-around gap-24 items-center border-b py-3" key={item.id_book}>
+                <div className="flex-grow">
+                    <div className="flex items-center gap-4">
+                        <IoIosClose className="text-4xl text-gray-600 cursor-pointer" onClick={() => removeCartItem(item.id_book)}/>
+                        <img src={item.cover} alt="" className="w-20" />
+                        <div>
+                            <h1 className="font-bold text-lg">{getCapitalize(item.title)}</h1>
+                            <div className="flex gap-2">
+                                {item.author_name?.map((item, index) => {
+                                    return <span key={index} className="text-gray-500 text-sm">{getCapitalize(item)}</span>
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div className="">{toRupiah(item.price)}</div>
+                <div className="flex shadow-md justify-evenly items-center gap-4 rounded-md font-semibold ">
+                    <div onClick={() => minQty(item.id_book)} className="cursor-pointer hover:bg-gray-100 py-2 px-5">-</div>
+                    <div className="">{item.qty}</div>
+                    <div onClick={() => addQty(item.id_book)} className="cursor-pointer hover:bg-gray-100 py-2 px-5">+</div>
+                </div>
+                <div className="font-semibold ">{toRupiah(item.price * item.qty)}</div>
             </div>
-            <div className="flex-1">{item.price}</div>
-            <div className="flex flex-1 shadow-md justify-evenly gap-4 py-2 px-2 rounded-md w-28 font-semibold">
-                <div onClick={() => minQty(item.id_book)} className="cursor-pointer">-</div>
-                <div className="">{qty[item.id_book] || 1}</div>
-                <div onClick={() => addQty(item.id_book)} className="cursor-pointer">+</div>
-            </div>
-            <div className="font-semibold flex-1">80.000</div>
+            })}
         </div>
-        })}
+
+        <div className="rounded-lg bg-gray-200 px-5 pb-5">
+            <div className="font-bold py-7 border-b border-gray-400 text-xl">Summary</div>
+            <div className="space-y-5 pt-5">
+                <div className="flex gap-36 justify-between">
+                    <div>Total products</div>
+                    <div>{}</div>
+                </div>
+                <div className="flex gap-36 justify-between">
+                    <div>Biaya ongkir</div>
+                    <div>Gratis</div>
+                </div>
+                <div>Add promo code</div>
+                <div className="flex gap-36 justify-between font-bold">
+                    <div>Total</div>
+                    <div>{getTotal(cart)}</div>
+                </div>
+            </div>
+            <button className="bg-gray-200 hover:bg-gray-300 rounded-md transition-all w-full py-4 mt-4 font-bold">Checkout</button>
+        </div>
+
+
     </div>
+}
+    </>
   )
 }
 

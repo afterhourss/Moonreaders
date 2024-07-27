@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Button from "./Button";
 import SearchBar from "./SearchBar";
+import Dropdown from "./Dropdown";
 
 const dropdownItem = [
   {
@@ -24,7 +25,6 @@ const dropdownItem = [
 function Navbar({cart, user, auth}) {
 
   const [scroll, setScrolled] = useState('')
-  const [dropdown, setDropdown] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,31 +44,20 @@ function Navbar({cart, user, auth}) {
   }, []);
 
   return (
-    <div className={`${scroll ? "bg-white shadow-sm" : ""} transition duration-200 flex w-full justify-between h-24 items-center px-24 fixed top-0 z-50`}>
+    <div className={`${scroll ? "bg-white shadow-sm" : ""} transition duration-200 flex w-full justify-between h-24 items-center px-52 fixed top-0 z-50`}>
         <div className="text-2xl font-bold">MOONREADERS.</div>
 
         {/* dropdown */}
-        <div className="relative z-50">
-          <div className="flex gap-2 items-center cursor-pointer text-xl font-normal hover:font-bold transition-all" onClick={() => setDropdown(!dropdown)}>Choice {dropdown ? <IoMdArrowDropdownCircle /> : <IoMdArrowDropdown />}</div>
-          {dropdown &&
-          <div className="absolute bg-white rounded-md flex flex-col gap-5 border border-gray-200">
-            {dropdownItem.map((item, index) => {
-              return <div key={index} className="hover:bg-gray-50 py-2 px-3 cursor-pointer">
-                {item.name}
-              </div>
-            })}
-          </div>
-          }
-        </div>
+        <Dropdown title="Choice" dropdownItem={dropdownItem}/>
         <SearchBar/>
         <div className="flex gap-14 text-lg items-center">
           {!auth ?
           <>
             <Link to="/cart">
-              <button className="p-3 bg-gray-200 text-gray-500 rounded-full
+              <button className="p-3 text-gray-500
               relative">
                 <FaShoppingCart />
-                {cart.length !== 0 ? <div className="absolute -top-2 right-0 rounded-full w-4 h-4 bg-black text-xs text-white">{cart.length}</div> : ""}
+                {cart.length !== 0 ? <div className="absolute top-1 right-0 rounded-full w-4 h-4 bg-orange-400 text-xs text-white">{cart.length}</div> : ""}
               </button>
             </Link>
             <div><Link to="/signin" className="font-semibold">Sign in</Link></div>

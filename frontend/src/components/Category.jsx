@@ -54,7 +54,9 @@ function Category() {
   },[])
 
   return (
-    <div className="px-24 pt-24 mt-14 flex gap-28 bg-white">
+    <>
+    
+    <div className="px-52 pt-24 mt-14 flex gap-28">
       <div className="flex-2 space-y-3">
       <h1 className="text-3xl font-bold text-gray-300 pb-9">Category</h1>
       {category.map((item, index) => {
@@ -77,7 +79,7 @@ function Category() {
       </div>
 
       <div className="w-full flex flex-col border-l mx-auto pl-11">
-      <div>
+        <div>
         <h1 className="text-3xl font-bold text-gray-300">Book of the year</h1>
         <div className="flex gap-5 my-10">
           {boty.map((book, index) => {
@@ -96,6 +98,7 @@ function Category() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
