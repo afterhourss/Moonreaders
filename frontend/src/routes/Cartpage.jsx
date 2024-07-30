@@ -3,6 +3,7 @@ import { IoIosClose } from "react-icons/io";
 import { useOutletContext } from "react-router-dom";
 import { toRupiah, getCapitalize } from "../utils/utils";
 import { Link } from "react-router-dom";
+import QtyButton from "../components/QtyButton";
 
 function Cartpage() {
     const [addCart, cart, removeCartItem, addQty, minQty] = useOutletContext();
@@ -40,17 +41,13 @@ function Cartpage() {
                     </div>
                 </div>
                 <div className="">{toRupiah(item.price)}</div>
-                <div className="flex shadow-md justify-evenly items-center gap-4 rounded-md font-semibold ">
-                    <div onClick={() => minQty(item.id_book)} className="cursor-pointer hover:bg-gray-100 py-2 px-5">-</div>
-                    <div className="">{item.qty}</div>
-                    <div onClick={() => addQty(item.id_book)} className="cursor-pointer hover:bg-gray-100 py-2 px-5">+</div>
-                </div>
+                <QtyButton qty={item.qty} minQty={minQty} addQty={addQty} id={item.id_book}/>
                 <div className="font-semibold ">{toRupiah(item.price * item.qty)}</div>
             </div>
             })}
         </div>
 
-        <div className="rounded-lg bg-gray-200 px-5 pb-5">
+        <div className="rounded-lg bg-gray-200 px-5 pb-5 self-start">
             <div className="font-bold py-7 border-b border-gray-400 text-xl">Summary</div>
             <div className="space-y-5 pt-5">
                 <div className="flex gap-36 justify-between">

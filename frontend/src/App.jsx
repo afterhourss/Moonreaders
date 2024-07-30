@@ -55,8 +55,7 @@ function App() {
     const updatedCart = cart.filter(item => item.id_book !== id)
     setCart(updatedCart)
   }
-  
-  console.log(cart)
+
 
   useEffect(() => {
     checkAuth();
@@ -64,7 +63,7 @@ function App() {
 
   return (
     <div className="pt-24">
-      <Navbar cart={cart} user={userData} auth={isAuth}/>
+      <Navbar cart={cart} user={userData} auth={isAuth} addQty={addQty} minQty={minQty}/>
       <Outlet context={[addCart, cart, removeCartItem, addQty, minQty]}/>
     </div>
   )

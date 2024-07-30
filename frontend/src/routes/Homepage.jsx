@@ -9,11 +9,6 @@ function Homepage() {
     <>
         <Hero/>
         <div className="bg-white">
-          <div className="flex justify-between px-52 gap-10 mt-14 pt-14">
-            <Box/>
-            <Box/>
-            <Box/>
-          </div>
           <Category/>
         </div>
     </>

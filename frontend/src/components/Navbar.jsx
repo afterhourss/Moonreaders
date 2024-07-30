@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import Button from "./Button";
 import SearchBar from "./SearchBar";
 import Dropdown from "./Dropdown";
+import Sidebar from "./Sidebar";
 
 const dropdownItem = [
   {
@@ -22,9 +23,15 @@ const dropdownItem = [
   }
 ]
 
-function Navbar({cart, user, auth}) {
+function Navbar({cart, user, auth, addQty, minQty}) {
+
 
   const [scroll, setScrolled] = useState('')
+  const [sidebarCart, setSidebarCart] = useState(false)
+
+  const toggleSidebarCart = () => {
+    setSidebarCart(!sidebarCart)
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,7 +51,8 @@ function Navbar({cart, user, auth}) {
   }, []);
 
   return (
-    <div className={`${scroll ? "bg-white shadow-sm" : ""} transition duration-200 flex w-full justify-between h-24 items-center px-52 fixed top-0 z-50`}>
+    <>
+    <div className={`${scroll ? "bg-white shadow-sm" : ""} transition duration-200 flex w-full justify-between h-24 items-center px-52 fixed top-0`}>
         <div className="text-2xl font-bold">MOONREADERS.</div>
 
         {/* dropdown */}
@@ -53,13 +61,11 @@ function Navbar({cart, user, auth}) {
         <div className="flex gap-14 text-lg items-center">
           {!auth ?
           <>
-            <Link to="/cart">
-              <button className="p-3 text-gray-500
-              relative">
-                <FaShoppingCart />
-                {cart.length !== 0 ? <div className="absolute top-1 right-0 rounded-full w-4 h-4 bg-orange-400 text-xs text-white">{cart.length}</div> : ""}
-              </button>
-            </Link>
+            <button className="p-3 text-gray-500
+            relative" onClick={toggleSidebarCart}>
+              <FaShoppingCart />
+              {cart.length !== 0 ? <div className="absolute top-1 right-0 rounded-full w-4 h-4 bg-orange-400 text-xs text-white">{cart.length}</div> : ""}
+            </button>
             <div><Link to="/signin" className="font-semibold">Sign in</Link></div>
             <Link to="/signup"><Button text="Sign up"/></Link>
             </>
@@ -67,6 +73,10 @@ function Navbar({cart, user, auth}) {
           }
         </div>
     </div>
+    {sidebarCart &&
+      <Sidebar toggle={toggleSidebarCart} cart={cart} addQty={addQty} minQty={minQty}/>
+    }
+    </>
   )
 }
 

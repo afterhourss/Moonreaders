@@ -6,10 +6,10 @@ import Button from "./Button";
 
 function Hero() {
   return (
-    <div className="bg-[#FF8500] mx-52 h-[500px] flex justify-between p-40 rounded-3xl overflow-hidden items-center border-black shadow-sm gap-10">
+    <div className="bg-white mx-52 h-[500px] flex justify-between p-40 rounded-3xl overflow-hidden items-center border-black shadow-sm gap-10">
         <div className="w-[500px] flex flex-col gap-5">
-            <h1 className="text-6xl font-bold text-white">Place for the Amazing Books</h1>
-            <p className='text-white'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque aperiam, nobis soluta iusto porro officiis ad molestias quibusdam culpa, vitae consequatur aspernatur obcaecati iure. Quaerat.</p>
+            <h1 className="text-6xl font-bold text-black">Place for the Amazing Books</h1>
+            <p className='text-black'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque aperiam, nobis soluta iusto porro officiis ad molestias quibusdam culpa, vitae consequatur aspernatur obcaecati iure. Quaerat.</p>
             <Link to="#"><Button text="Explore"/></Link>
         </div>
         <div>
