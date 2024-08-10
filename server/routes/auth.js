@@ -70,7 +70,7 @@ router.post('/login', async(req,res) => {
 router.post('/protected', middle, async(req,res) => {
     // res.json(req.username)
     try {
-        const user = await pool.query('SELECT username FROM users WHERE username = $1', [req.username])
+        const user = await pool.query('SELECT * FROM users WHERE username = $1', [req.username])
         res.json({auth: true, data: user})
     } catch (error) {
         console.log(error)

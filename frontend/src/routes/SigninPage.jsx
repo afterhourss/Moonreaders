@@ -2,7 +2,11 @@ import { useState } from "react"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const apiHost = import.meta.env.VITE_HOST
+const apiPort = import.meta.env.VITE_PORT
+
 function SigninPage() {
+
   const [username,setUsername] = useState('');
   const [password,setPassword] = useState('');
   const [userToken, setUserToken] = useState('');
@@ -13,7 +17,7 @@ function SigninPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/auth/login',{username,password})
+      const response = await axios.post(`${apiHost}:${apiPort}/auth/login`,{username,password})
       localStorage.setItem('token', response.data.token)
       setUserToken(response.data.token)
       navigate('/')

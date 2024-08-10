@@ -1,6 +1,10 @@
 import Navbar from "./components/Navbar"
 import { Outlet } from "react-router-dom"
 import { useEffect, useState } from "react"
+
+const apiHost = import.meta.env.VITE_HOST;
+const apiPort = import.meta.env.VITE_PORT;
+
 function App() {
 
   const [cart, setCart] = useState([])
@@ -10,13 +14,14 @@ function App() {
 
     const checkAuth = async () => {
       try {
-        const response = await fetch('http://localhost:5000/auth/protected', {
+        const response = await fetch(`${apiHost}:${apiPort}/auth/protected`, {
           method: 'POST',
           headers: {token: localStorage.token }
       })
       const parseRes = await response.json()
       parseRes.auth === true ? setAuth(true) : setAuth(false)
       setUserData(parseRes.data.rows[0])
+      console.log(parseRes)
       } catch (error) { 
         console.log(error)
       }
@@ -64,7 +69,7 @@ function App() {
   return (
     <div className="pt-24">
       <Navbar cart={cart} user={userData} auth={isAuth} addQty={addQty} minQty={minQty}/>
-      <Outlet context={[addCart, cart, removeCartItem, addQty, minQty]}/>
+      <Outlet context={[addCart, cart, removeCartItem, addQty, minQty, userData, isAuth, apiHost, apiPort]}/>
     </div>
   )
 }

@@ -1,8 +1,11 @@
 const express = require("express");
-const app = express();
+const multer = require('multer')
 const pool = require('./config/db.js')
 const auth = require('./routes/auth.js')
 const middle = require('./middleware/auth.js')
+const path = require('path')
+
+const app = express();
 
 const cors = require("cors");
 require('dotenv').config()
@@ -10,6 +13,21 @@ require('dotenv').config()
 app.use(cors());
 app.use(express.json());
 
+
+//multer configuration
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname);
+      cb(null, file.fieldname + '-' + uniqueSuffix + ext);
+    }
+});
+
+//this will user upload var as parameter below
+const upload = multer({storage: storage})
 // routes
 // create
 
@@ -59,10 +77,44 @@ app.get('/info/:id', async(req,res) => {
     }
 })
 
+//upload image
+app.post('/user/profile/upload', upload.single('avatar'), (req, res) => {
+    if(!req.file) {
+        return res.status(400).send('No file uploaded')
+    }
+    res.send({filePath: `/uploads/${req.file.filename}`})
+})
+
+//remove image
+app.put('/user/profile/remove/:id_user', async(req,res) => {
+    try {
+        const { id_user } = req.params;
+        const setToDefaultProfile = await pool.query('UPDATE users SET profile = \'/profile/default-profile.jpg\' WHERE id_user = $1',[id_user])
+        res.json("profile has removed")
+    } catch (error) {
+        res.send().status(400)
+    }
+})
+
+//remove user
+app.delete('/user/delete/:id_user', async(req,res) => {
+    try {
+        const { id_user } = req.params;
+        const deleteUser = await pool.query('DELETE FROM users WHERE id_user = $1',[id_user])
+        res.status(200).json({ message: 'User successfully deleted' });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+})
+
+
+//make path below static
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use('/auth', auth) //middleware untuk menjalankan route lainnya
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 app.listen(5000, () => {
   console.log(`server has started on port ${PORT}`);

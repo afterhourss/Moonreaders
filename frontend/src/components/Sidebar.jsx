@@ -13,7 +13,7 @@ function Sidebar({toggle, cart, addQty, minQty}) {
   return (
     <>
     <div className="bg-black w-full h-[100vh] opacity-40 fixed top-0" onClick={toggle}></div>
-    <div className="w-[500px] h-[100vh] fixed bg-white right-0 top-0 px-6 py-15 overflow-y-scroll">
+    <div className="w-[500px] h-[100vh] fixed bg-white right-0 top-0 z-10 px-6 py-15 overflow-y-scroll">
         <div className="flex justify-between items-center py-10">
             <div className="font-bold text-2xl">Shopping Cart</div>
             <IoIosClose className="text-5xl cursor-pointer" onClick={toggle}/>

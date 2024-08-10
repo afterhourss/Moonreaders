@@ -9,3 +9,5 @@ export const toRupiah = (num) => {
         currency: "IDR"
     }).format(num)
 }
+
+export const defaultProfile = "/profile/default-profile.jpg"

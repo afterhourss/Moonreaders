@@ -8,6 +8,7 @@ import './index.css'
 import DetailsPage from './routes/DetailsPage.jsx';
 import Homepage from './routes/Homepage.jsx';
 import Cartpage from './routes/Cartpage.jsx';
+import Profilepage from './routes/Profilepage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       {index:true, element: <Homepage/>},
       {path:"/info/:id", element: <DetailsPage/>},
       {path:"/cart", element: <Cartpage/>},
+      {path: '/profile/:username', element: <Profilepage/>}
     ]
   },
   {

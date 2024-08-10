@@ -2,6 +2,8 @@ import SearchBar from "./SearchBar"
 import BookWrapper from "./BookWrapper"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
+
 
 function getCapitalize(string){
   const modStr = string[0].toUpperCase() + string.slice(1);
@@ -9,54 +11,55 @@ function getCapitalize(string){
 }
 
 function Category() {
-
+  const [addCart, cart, removeCartItem, addQty, minQty, userData, isAuth, apiHost, apiPort] = useOutletContext();
+  
   const [books, setBook] = useState([]);
   const [category, setCategory] = useState([]);
   const [boty, setBoty] = useState([]);
   
   const getBook = async () => {
     try{
-      const response = await fetch('http://localhost:5000/book')
+      const response = await fetch(`${apiHost}:${apiPort}/book`)
       const jsonData = await response.json()
-
+      
       setBook(jsonData);
     }catch(err){
       console.error(err.message)
     }
   }
-
+  
   const getCategory = async () => {
     try{
-      const response = await fetch('http://localhost:5000/category')
+      const response = await fetch(`${apiHost}:${apiPort}/category`)
       const jsonData = await response.json()
-
+      
       setCategory(jsonData);
     }catch(err){
       console.error(err.message)
     }
   }
-
+  
   const getBoty = async () => {
     try {
-      const response = await fetch('http://localhost:5000/book/boty')
+      const response = await fetch(`${apiHost}:${apiPort}/book/boty`)
       const jsonData = await response.json()
-
+      
       setBoty(jsonData);
     } catch (err) {
       console.error(err.message)
     }
   }
-
+  
   useEffect(() => {
     getBook();
     getCategory();
     getBoty();
   },[])
-
+  
   return (
     <>
     
-    <div className="px-52 pt-24 mt-14 flex gap-28">
+    <div className="lg:px-52 flex gap-28 lg:flex-row flex-col">
       <div className="flex-2 space-y-3">
       <h1 className="text-3xl font-bold text-gray-300 pb-9">Category</h1>
       {category.map((item, index) => {
